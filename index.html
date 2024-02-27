@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro Clock</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .timer {
+      margin-top: 20px;
+    }
+
+    #time-display {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    #status-display {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pomodoro Clock</h1>
+    <div class="timer">
+      <div id="time-display">25:00</div>
+      <div id="status-display">Study</div>
+      <button id="start-btn">Start</button>
+      <button id="reset-btn">Reset</button>
+    </div>
+  </div>
+  
+  <script>
+    let timer;
+    let minutes = 25;
+    let seconds = 0;
+    let isRunning = false;
+    let isStudyInterval = true;
+
+    function startTimer() {
+      isRunning = true;
+      timer = setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+      isRunning = false;
+      clearInterval(timer);
+    }
+
+    function resetTimer() {
+      minutes = 25;
+      seconds = 0;
+      isStudyInterval = true;
+      updateDisplay();
+    }
+
+    function updateTimer() {
+      if (minutes === 0 && seconds === 0) {
+        if (isStudyInterval) {
+          minutes = 5; // Break interval duration
+          seconds = 0;
+          isStudyInterval = false;
+          document.getElementById('status-display').textContent = 'Break';
+        } else {
+          minutes = 25; // Study interval duration
+          seconds = 0;
+          isStudyInterval = true;
+          document.getElementById('status-display').textContent = 'Study';
+        }
+        playNotificationSound();
+      }
+      if (seconds === 0) {
+        minutes--;
+        seconds = 59;
+      } else {
+        seconds--;
+      }
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const display = document.getElementById('time-display');
+      const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      display.textContent = formattedTime;
+    }
+
+    function playNotificationSound() {
+      const audio = new Audio('data:audio/mpeg;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAAMAAACAgAAEAAAABAAEAQAAAAAAAAEAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAC+AAAAAMAAADQAwAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAQAAAAAAAABAAEAAAAAAAABEAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
